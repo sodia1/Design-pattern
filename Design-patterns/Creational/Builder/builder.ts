@@ -27,6 +27,12 @@ class ConcreteBuilder implements Builder{
     public producePartC(): void {
         this.product.parts.push('PartC');
     }
+
+    public getProduct(): Product1 {
+        const result = this.product;
+        this.reset();
+        return result;
+    }
 }
 
 class Product1{
@@ -53,3 +59,25 @@ class Director{
         this.builder.producePartC();
     }
 }
+
+function clientCode(director: Director) {
+    const builder = new ConcreteBuilder();
+    director.setBuilder(builder);
+
+    console.log('Standard basic product:');
+    director.buildMVP();
+    builder.getProduct().listParts();
+
+    console.log('Standard full featured product:');
+    director.buildFullFeatureProduct();
+    builder.getProduct().listParts();
+
+    // Remember, the Builder pattern can be used without a Director class.
+    console.log('Custom product:');
+    builder.producePartA();
+    builder.producePartC();
+    builder.getProduct().listParts();
+}
+
+const director = new Director();
+clientCode(director);
